@@ -30,7 +30,7 @@ function Invoke-Pobf {
     $PlainScript = ""
 
     if($FileName -and (-not (Get-Item $FileName).PSIsContainer)) {
-      $PlainScript = Get-Content $FileName
+      $PlainScript = Get-Content $FileName -Raw
     } else {
       $PlainScript = $Script
     }
@@ -52,6 +52,6 @@ function Invoke-Pobf {
 
     $prep = '${)}=${~}=+$();${!}=++${~};${@}=++${~};${#}=++${~};${$}=++${~};${%}=++${~};${^}=++${~};${&}=++${~};${*}=++${~};${(}=++${~};${;}="".("$(@{})"["${!}${$}"]+"$(@{})"["${!}${^}"]+"$(@{})"["${!}${&}"]+"$(@{})"[${$}]+"$?"[${!}]+"$(@{})"[${#}]);${-}="["+"$(@{})"[${&}]+"$(@{})"["${!}${(}"]+"$(@{})"["${@}${)}"]+"$?"[${!}]+"]";${=}="${;}"[${#}]+"${;}"["${!}${)}"]+"${;}"["${@}${&}"];'
     $cmd = Get-EncodedCode $PlainScript
-    Write-Output "$prep;"`"($cmd)'|${=}"|&${=}'
+    Write-Output ($prep + "`"" + $cmd + '|${=}"|&${=}')
   }
 }
